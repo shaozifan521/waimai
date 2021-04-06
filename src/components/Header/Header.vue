@@ -1,19 +1,22 @@
 <template>
   <div>
-    <section class="order">
-      <Header title="订 单"></Header>
-      <section class="order_no_login">
-        <img src="./images/order/person.png">
-        <h3>登录后查看外卖订单</h3>
-        <button>立即登陆</button>
-      </section>
-    </section>
+    <header class="header">
+      <slot name="left"></slot>
+      <span class="header_title">
+        <span class="header_title_text ellipsis">{{title}}</span>
+      </span>
+      <slot name="right"></slot>
+    </header>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Order',
+  props: {
+    title: {
+      type: String
+    }
+  },
   data () {
     return {
 
@@ -23,9 +26,7 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-  .order  //订单
-    width 100%
-    .header
+  .header
       background-color #02a774
       position fixed
       z-index 100
@@ -40,6 +41,7 @@ export default {
         transform translateY(-50%)
         width 10%
         height 50%
+        color #fff
         .icon-sousuo
           font-size 25px
           color #fff
@@ -64,26 +66,4 @@ export default {
         transform translateY(-50%)
         .header_login_text
           color #fff
-    .order_no_login
-      padding-top 140px
-      width 60%
-      margin 0 auto
-      text-align center
-      >img
-        display block
-        width 100%
-        height 30%
-      >h3
-        padding 10px 0
-        font-size 17px
-        color #6a6a6a
-      >button
-        display inline-block
-        background #02a774
-        font-size 14px
-        color #fff
-        border 0
-        outline none
-        border-radius 5px
-        padding 10px 20px
 </style>

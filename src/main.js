@@ -5,6 +5,10 @@ import store from './store'
 
 import 'lib-flexible'
 
+import Header from './components/Header/Header'
+
+Vue.component('Header', Header)
+
 Vue.config.productionTip = false
 
 new Vue({

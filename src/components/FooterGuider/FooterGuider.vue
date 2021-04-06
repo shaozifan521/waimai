@@ -54,6 +54,7 @@ export default {
     height 50px
     width 100%
     display flex
+    background-color #fff
     .guider-item
       width 25%
       display: flex
