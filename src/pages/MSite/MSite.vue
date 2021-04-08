@@ -332,6 +332,8 @@ export default {
       observer: true,
       observeParents: true
     })
+  },
+  methods: {
   }
 }
 </script>

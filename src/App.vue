@@ -7,11 +7,9 @@
 
 <script>
 import FooterGuider from '@/components/FooterGuider/FooterGuider'
-import { reqAddress } from '@/api'
 export default {
   async mounted () {
-    const result = await reqAddress(40.10038, 116.36867)
-    console.log(result)
+    this.$store.dispatch('getShops')
   },
   components: {
     FooterGuider
