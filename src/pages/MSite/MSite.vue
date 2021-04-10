@@ -12,112 +12,21 @@
       </Header>
       <!--首页导航-->
       <nav class="msite_nav">
-        <div class="swiper-container">
+        <div class="swiper-container" v-if="categorys.length > 0">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <a href="javascript:" class="link_to_food">
+            <div class="swiper-slide" v-for="(categorys, index) in categorysArr" :key="index">
+              <a href="javascript:" class="link_to_food" v-for="(category, index) in categorys" :key="index">
                 <div class="food_container">
-                  <img src="./images/nav/1.jpg">
+                  <img :src="'https://fuss10.elemecdn.com' + category.image_url">
                 </div>
-                <span>甜品饮品</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/2.jpg">
-                </div>
-                <span>商超便利</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/3.jpg">
-                </div>
-                <span>美食</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/4.jpg">
-                </div>
-                <span>简餐</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/5.jpg">
-                </div>
-                <span>新店特惠</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/6.jpg">
-                </div>
-                <span>准时达</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/7.jpg">
-                </div>
-                <span>预订早餐</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/8.jpg">
-                </div>
-                <span>土豪推荐</span>
-              </a>
-            </div>
-            <div class="swiper-slide">
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/9.jpg">
-                </div>
-                <span>甜品饮品</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/10.jpg">
-                </div>
-                <span>商超便利</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/11.jpg">
-                </div>
-                <span>美食</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/12.jpg">
-                </div>
-                <span>简餐</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/13.jpg">
-                </div>
-                <span>新店特惠</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/14.jpg">
-                </div>
-                <span>准时达</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/1.jpg">
-                </div>
-                <span>预订早餐</span>
-              </a>
-              <a href="javascript:" class="link_to_food">
-                <div class="food_container">
-                  <img src="./images/nav/2.jpg">
-                </div>
-                <span>土豪推荐</span>
+                <span>{{category.title}}</span>
               </a>
             </div>
           </div>
           <!-- Add Pagination -->
           <div class="swiper-pagination"></div>
         </div>
+        <img v-else src="./images/msite_back.svg" alt="">
       </nav>
       <!--首页附近商家-->
       <div class="msite_shop_list">
@@ -170,20 +79,21 @@
               </a>
             </li>
           </ul>
+          <ul v-if="shops.length === 0">
+            <li><img src="./images/shop_back.svg" alt=""></li>
+            <li><img src="./images/shop_back.svg" alt=""></li>
+            <li><img src="./images/shop_back.svg" alt=""></li>
+            <li><img src="./images/shop_back.svg" alt=""></li>
+          </ul>
         </div>
       </div>
-      <ul v-if="shops.length === 0">
-        <li><img src="./images/shop_back.svg" alt=""></li>
-        <li><img src="./images/shop_back.svg" alt=""></li>
-        <li><img src="./images/shop_back.svg" alt=""></li>
-        <li><img src="./images/shop_back.svg" alt=""></li>
-      </ul>
     </section>
   </div>
 </template>
 <script>
 import Swiper from 'swiper'
 import 'swiper/css/swiper.min.css'
+import chunk from 'lodash/chunk'
 import { mapState } from 'vuex'
 
 export default {
@@ -193,7 +103,11 @@ export default {
 
     }
   },
-  mounted () {
+  async mounted () {
+    this.$store.dispatch('getAddress')
+    this.$store.dispatch('getShops')
+    // dispatch 返回的是promise对象，并且是数据更新以后，且页面dom也更新后才返回的promise
+    await this.$store.dispatch('getCategorys')
     /* eslint-disable no-new */
     new Swiper('.swiper-container', {
       direction: 'horizontal', // 垂直切换选项
@@ -205,14 +119,34 @@ export default {
       observer: true,
       observeParents: true
     })
-    this.$store.dispatch('getAddress')
-    this.$store.dispatch('getShops')
   },
   methods: {
   },
   computed: {
     ...mapState(['address']),
-    ...mapState(['shops'])
+    ...mapState(['shops']),
+    ...mapState(['categorys']),
+    categorysArr () {
+      // 按条件将一维数组转成二维数组
+      let { categorys } = this
+      let bigArr = []
+      let smallArr = []
+      categorys.forEach((item, index) => {
+        if (smallArr.length === 0) {
+          bigArr.push(smallArr)
+        }
+        smallArr.push(item)
+        if (smallArr.length === 8) {
+          smallArr = []
+        }
+      })
+      return bigArr
+    },
+    // 将一维数组按照条件转成二维数组的第二种方法（使用第三方库 lodash.js 完成）
+    categorysArr2 () {
+      let { categorys } = this
+      return chunk(categorys, 8)
+    }
   }
 }
 </script>
