@@ -19,7 +19,7 @@ export default {
 
   // 获取商铺分类列表
   async getShops ({ commit, state }) {
-    let result = await reqShops()
+    let result = await reqShops(state.longitude, state.latitude)
     if (result.code === 0) {
       commit('getShops', result.data)
     }

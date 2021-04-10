@@ -7,9 +7,9 @@
 
 <script>
 import FooterGuider from '@/components/FooterGuider/FooterGuider'
+
 export default {
-  async mounted () {
-    this.$store.dispatch('getShops')
+  mounted () {
   },
   components: {
     FooterGuider
