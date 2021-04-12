@@ -7,8 +7,10 @@ import 'lib-flexible'
 import './validate'
 
 import Header from './components/Header/Header'
+import Star from './components/Star/Star'
 
 Vue.component('Header', Header)
+Vue.component('Star', Star)
 
 Vue.config.productionTip = false
 
