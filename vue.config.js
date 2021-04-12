@@ -4,6 +4,7 @@ function resolve (dir) {
 }
 
 module.exports = {
+  // lintOnSave: false, // 关闭EsLint的规则
   css: {
     loaderOptions: {
       css: {},

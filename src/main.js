@@ -4,6 +4,7 @@ import router from './router'
 import store from './vuex/store'
 
 import 'lib-flexible'
+import './validate'
 
 import Header from './components/Header/Header'
 
