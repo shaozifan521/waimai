@@ -7,5 +7,11 @@ export default {
   },
   getShops (state, shops) {
     state.shops = shops
+  },
+  receiveUser (state, { user }) {
+    state.user = user
+  },
+  receiveToken (state, { token }) {
+    state.token = token
   }
 }

@@ -19,7 +19,8 @@
               <span style="color: red;" v-show="errors.has('phone')">{{ errors.first('phone') }}</span>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码">
+              <input v-model="code" name="code" v-validate="{required: true, regex: /^\d{6}$/}" type="tel" maxlength="8" placeholder="验证码">
+              <span style="color: red;" v-show="errors.has('code')">{{ errors.first('code') }}</span>
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -29,22 +30,28 @@
           <div :class="{on: !isShowMsg}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input v-model="name" name="name" v-validate="'required'" type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <span style="color: red;" v-show="errors.has('name')">{{ errors.first('name') }}</span>
               </section>
               <section class="login_verification">
-                <input :type="isShowPwd ? 'text' : 'password'" maxlength="8" placeholder="密码">
+                <input v-model="pwd" name="pwd" v-validate="'required'" :type="isShowPwd ? 'text' : 'password'" maxlength="8" placeholder="密码">
                 <div class="switch_button" :class="isShowPwd ? 'on' : 'off'" @click="isShowPwd = !isShowPwd">
                   <div class="switch_circle" :class="{right: isShowPwd}"></div>
                   <span class="switch_text">{{isShowPwd ? 'abc' : ''}}</span>
                 </div>
+                <span style="color: red;" v-show="errors.has('pwd')">{{ errors.first('pwd') }}</span>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <input v-model="captcha" name="captcha" v-validate="{required: true,regex: /^[0-9a-zA-Z]{4}$/}" type="text" maxlength="11" placeholder="验证码">
+                <!-- 这种是普通的http请求，不存在跨域的问题 -->
+                <img ref="captcha" class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="updataCaptcha">
+                <!-- 这种是跨域请求图形验证码 -->
+                <!-- <img class="get_verification" src="api/captcha" alt="captcha"> -->
+                <span style="color: red;" v-show="errors.has('captcha')">{{ errors.first('captcha') }}</span>
               </section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click="login">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -56,6 +63,8 @@
 </template>
 
 <script>
+import { Toast, MessageBox } from 'mint-ui'
+import { reqSendCode, reqPwdLogin, reqSmsLogin } from '@/api'
 
 export default {
   data () {
@@ -63,14 +72,18 @@ export default {
       isShowMsg: true,
       iphone: '',
       isShowPwd: false,
-      computedTime: 0
+      computedTime: 0,
+      code: '', // 短信验证码
+      name: '', // 用户名
+      pwd: '', // 密码
+      captcha: '' // 图形验证码
     }
   },
   mounted () {
     console.log(this.isRightIphone)
   },
   methods: {
-    sendCode () {
+    async sendCode () {
       this.computedTime = 10
       let intervalId = setInterval(() => {
         this.computedTime--
@@ -78,6 +91,59 @@ export default {
           clearInterval(intervalId)
         }
       }, 1000)
+      // 发送短信验证码
+      let result = await reqSendCode(this.iphone)
+      if (result.code === 0) {
+        Toast('短信发送成功!')
+      } else {
+        // 停止计时
+        this.computedTime = 0
+        MessageBox('提示', result.msg)
+      }
+    },
+    // 刷新图形验证码
+    updataCaptcha () {
+      // 动态获取图形验证码
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
+    },
+    // 登陆
+    async login () {
+      // 进行前台表单验证
+      let names
+      if (this.isShowMsg) {
+        names = ['phone', 'code']
+      } else {
+        names = ['name', 'pwd', 'captcha']
+      }
+
+      const success = await this.$validator.validateAll(names) // 对指定的所有表单项进行验证
+      if (success) {
+        const { phone, code, name, pwd, captcha } = this
+        // 验证通过后发登陆的请求
+        let result
+        if (this.isShowMsg) {
+          result = await reqSmsLogin({ phone, code })
+          // 请求结束后, 停止计时
+          this.computedTime = 0
+        } else {
+          result = await reqPwdLogin({ name, pwd, captcha })
+          if (result.code !== 0) { // 登陆失败了
+            this.updataCaptcha() // 更新图形验证码
+            this.captcha = ''
+          }
+        }
+
+        // 根据请求的结果进行处理
+        if (result.code === 0) { // 登陆请求成功
+          const user = result.data
+          // 保存user到state
+          this.$store.dispatch('saveUser', user)
+          // 跳转到个人中心
+          this.$router.replace('/profile')
+        } else { // 登陆请求失败
+          MessageBox.alert(result.msg)
+        }
+      }
     }
   },
   computed: {

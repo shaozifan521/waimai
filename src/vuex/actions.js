@@ -23,5 +23,15 @@ export default {
     if (result.code === 0) {
       commit('getShops', result.data)
     }
+  },
+
+  // 保存用户的同步action
+  saveUser ({ commit }, user) {
+    // 将token保存local中
+    const token = user.token
+    localStorage.setItem('token_key', token)
+    delete user.token
+    commit('receiveUser', { user })
+    commit('receiveToken', { token })
   }
 }
