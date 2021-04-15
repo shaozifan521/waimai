@@ -4,25 +4,25 @@
       <span>
         <i class="iconfont iconmsite"></i>
       </span>
-      <span>首页</span>
+      <span>{{$t('footer_home')}}</span>
     </span>
     <span class="guider-item" :class="{on: $route.path === '/search'}" @click="goto('/search')">
       <span>
         <i class="iconfont iconsearch"></i>
       </span>
-      <span>搜索</span>
+      <span>{{$t('footer_search')}}</span>
     </span>
     <span class="guider-item" :class="{on: $route.path === '/order'}" @click="goto('/order')">
       <span>
         <i class="iconfont iconorder"></i>
       </span>
-      <span>订单</span>
+      <span>{{$t('footer_order')}}</span>
     </span>
     <span class="guider-item" :class="{on: $route.path === '/profile'}" @click="goto('/profile')">
       <span>
         <i class="iconfont iconprofile"></i>
       </span>
-      <span>个人</span>
+      <span>{{$t('footer_own')}}</span>
     </span>
   </div>
 </template>

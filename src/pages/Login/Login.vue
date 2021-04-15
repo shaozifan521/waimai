@@ -12,7 +12,7 @@
         <form>
           <div :class="{on: isShowMsg}">
             <section class="login_message">
-              <input type="tel" name="phone" v-validate="'required|mobile'" maxlength="11" placeholder="手机号" v-model="iphone">
+              <input type="tel" name="phone" v-validate="'required|mobile'" maxlength="11" placeholder="手机号" v-model="phone">
               <button :disabled="!isRightIphone || computedTime > 0" class="get_verification" :class="{is_right_phone: isRightIphone}" @click.prevent="sendCode">
                 {{ computedTime > 0 ? `短信已发送${computedTime}` : '获取验证码'}}
               </button>
@@ -51,9 +51,9 @@
               </section>
             </section>
           </div>
-          <button class="login_submit" @click="login">登录</button>
+          <button class="login_submit" @click.prevent="login">{{$t('login_login')}}</button>
         </form>
-        <a href="javascript:;" class="about_us">关于我们</a>
+        <a href="javascript:;" class="about_us">{{$t('login_aboutUs')}}</a>
       </div>
       <a href="javascript:" class="go_back">
         <i class="iconfont iconzuojiantou" @click="$router.back()"></i>
@@ -70,7 +70,7 @@ export default {
   data () {
     return {
       isShowMsg: true,
-      iphone: '',
+      phone: '',
       isShowPwd: false,
       computedTime: 0,
       code: '', // 短信验证码
@@ -80,7 +80,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.isRightIphone)
   },
   methods: {
     async sendCode () {
@@ -92,7 +91,7 @@ export default {
         }
       }, 1000)
       // 发送短信验证码
-      let result = await reqSendCode(this.iphone)
+      let result = await reqSendCode(this.phone)
       if (result.code === 0) {
         Toast('短信发送成功!')
       } else {
@@ -148,7 +147,7 @@ export default {
   },
   computed: {
     isRightIphone () {
-      return /^1\d{10}$/.test(this.iphone)
+      return /^1\d{10}$/.test(this.phone)
     }
   }
 }

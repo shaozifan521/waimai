@@ -90,15 +90,28 @@
         </a>
       </section>
     </section>
+    <mt-button type="primary" size="large" style="background: #02A774;" @click="toggleLocale">切换语言</mt-button>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'Profile',
   data () {
     return {
 
+    }
+  },
+  methods: {
+    // 切换语言
+    toggleLocale () {
+      // 根据当前的locale确定新的locale
+      const locale = this.$i18n.locale === 'en' ? 'zh' : 'en'
+      // 指定新的locale
+      this.$i18n.locale = locale
+      // 保存新的locale
+      localStorage.setItem('locale_key', locale)
     }
   }
 }
