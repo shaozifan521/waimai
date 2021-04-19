@@ -13,5 +13,14 @@ export default {
   },
   receiveToken (state, { token }) {
     state.token = token
+  },
+  receiveInfo (state, info) {
+    state.info = info
+  },
+  receiveRatings (state, ratings) {
+    state.ratings = ratings
+  },
+  receiveGoods (state, goods) {
+    state.goods = goods
   }
 }

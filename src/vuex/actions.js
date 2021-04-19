@@ -1,4 +1,4 @@
-import { reqAddress, reqCategorys, reqShops } from '../api'
+import { reqAddress, reqCategorys, reqShops, reqShopInfo, reqShopRatings, reqShopGoods } from '../api'
 
 export default {
   // 获取当前位置信息
@@ -33,5 +33,38 @@ export default {
     delete user.token
     commit('receiveUser', { user })
     commit('receiveToken', { token })
+  },
+
+  // 异步获取商家信息
+  async getShopInfo ({ commit }, cb) {
+    const result = await reqShopInfo()
+    if (result.code === 0) {
+      const info = result.data
+      commit('receiveInfo', info)
+      // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+      cb && cb()
+    }
+  },
+
+  // 异步获取商家评价列表
+  async getShopRatings ({ commit }, cb) {
+    const result = await reqShopRatings()
+    if (result.code === 0) {
+      const ratings = result.data
+      commit('receiveRatings', ratings)
+      // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+      cb && cb()
+    }
+  },
+
+  // 异步获取商家商品列表
+  async getShopGoods ({ commit }, cb) {
+    const result = await reqShopGoods()
+    if (result.code === 0) {
+      const goods = result.data
+      commit('receiveGoods', goods)
+      // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+      cb && cb()
+    }
   }
 }

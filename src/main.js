@@ -7,6 +7,7 @@ import { Button } from 'mint-ui'
 
 import 'lib-flexible'
 import './validate'
+import '@/mock/mockServer.js'
 
 import Header from './components/Header/Header'
 import Star from './components/Star/Star'
