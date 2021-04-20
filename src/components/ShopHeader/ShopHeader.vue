@@ -2,8 +2,8 @@
   <div class="shop-header">
     <nav class="shop-nav"
          :style="{backgroundImage: `url(${info.bgImg})`}">
-      <a class="back">
-        <i class="iconfont icon-jiantouzuo"/>
+      <a class="back" @click="$router.back()">
+        <i class="iconfont iconzuojiantou"/>
       </a>
     </nav>
     <div class="shop-content" @click="isShowBulletin=true">
@@ -149,7 +149,7 @@ export default {
         position: absolute
         top: 10px
         left: 0
-        .icon-jiantouzuo
+        .iconzuojiantou
           display: block
           padding: 5px
           font-size: 20px
