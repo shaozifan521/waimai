@@ -30,7 +30,7 @@
                     <span class="now">￥{{food.price}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    CartControl组件
+                    <CartControl :food="food"></CartControl>
                   </div>
                 </div>
               </li>
@@ -71,6 +71,7 @@ export default {
       })
       // 右侧scroll对象
       this.rightScroll = new BScroll(this.$refs.right, {
+        click: true, // 分发click事件
         probeType: 1 // 非实时 触摸
         // probeType: 2  // 实时 触摸
         // probeType: 3  // 实时 触摸/惯性/编码
@@ -100,7 +101,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['goods']),
+    ...mapState({
+      goods: state => state.shop.goods
+    }),
     // 获取当前分类的下标
     currentIndex () {
       const { scrollY, tops } = this
@@ -124,6 +127,8 @@ export default {
         this.initTops()
       })
     }
+  },
+  components: {
   }
 }
 </script>

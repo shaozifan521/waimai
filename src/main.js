@@ -11,13 +11,15 @@ import '@/mock/mockServer.js'
 
 import Header from './components/Header/Header'
 import Star from './components/Star/Star'
+import CartControl from '@/components/CartControl/CartControl'
 
 // 通过插件的形式挂载
 Vue.use(VueI18n)
 
+Vue.component(Button.name, Button)
 Vue.component('Header', Header)
 Vue.component('Star', Star)
-Vue.component(Button.name, Button)
+Vue.component('CartControl', CartControl)
 
 Vue.config.productionTip = false
 

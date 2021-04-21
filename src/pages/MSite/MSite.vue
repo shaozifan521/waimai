@@ -119,9 +119,11 @@ export default {
   methods: {
   },
   computed: {
-    ...mapState(['address']),
-    ...mapState(['shops']),
-    ...mapState(['categorys']),
+    ...mapState({
+      address: state => state.msite.address,
+      shops: state => state.msite.shops,
+      categorys: state => state.msite.categorys
+    }),
     categorysArr () {
       // 按条件将一维数组转成二维数组
       let { categorys } = this

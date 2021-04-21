@@ -16,7 +16,7 @@ instance.interceptors.request.use(config => {
   Indicator.open()
   // 处理Post请求参数(从对象转换为urlencoding)
   if (data instanceof Object) {
-    data = qs.stringify(data) // 把对象参数转换成 username=tom&pwd=123
+    config.data = qs.stringify(data) // 把对象参数转换成 username=tom&pwd=123
   }
   return config
 }, error => {
