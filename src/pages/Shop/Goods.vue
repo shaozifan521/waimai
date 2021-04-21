@@ -16,7 +16,7 @@
           <li class="food-list-hook" v-for="good in goods" :key="good.name">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-for="food in good.foods" :key="food.name">
+              <li class="food-item bottom-border-1px" v-for="food in good.foods" :key="food.name" @click="showFood(food)">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -39,18 +39,21 @@
         </ul>
       </div>
     </div>
+    <Food :food="food" ref="food"></Food>
   </div>
 </template>
 
 <script>
 import BScroll from '@better-scroll/core'
 import { mapState } from 'vuex'
+import Food from '@/components/Food/Food'
 
 export default {
   data () {
     return {
       tops: [], // 右侧所有分类的<li>的top的数组, 在列表显示之后更新一次
-      scrollY: 0
+      scrollY: 0,
+      food: {} // 需要显示的food
     }
   },
   mounted () {
@@ -98,6 +101,16 @@ export default {
       })
       // 更新tops
       this.tops = tops
+    },
+    /* 显示指定food */
+    showFood (food) {
+      // 指定要显示的food数据
+      this.food = food
+      // 显示food组件界面
+      this.$refs.food.toggleShow()
+
+      // 子组件更新父组件的状态数据: 父组件向子组件标签传递函数属性
+      // 父组件更新子组件的状态数据: 父组件通过ref得到子组件对象, 调用其更新状态数据的方法
     }
   },
   computed: {
@@ -129,6 +142,7 @@ export default {
     }
   },
   components: {
+    Food
   }
 }
 </script>
