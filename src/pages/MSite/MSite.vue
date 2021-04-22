@@ -36,7 +36,12 @@
         </div>
         <div class="shop_container">
           <ul class="shop_list">
-            <li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index" @click="$router.push('/shop')">
+            <!-- 重点： -->
+            <!-- 这种动态路由跳转的方式，对于路由重定向是有效的 -->
+            <!-- $router.push(`/shop/${shop.id}`) -->
+            <!-- 这种动态路由跳转的方式，对于路由重定向是无效的 -->
+            <!-- {name: 'shop', params: {id: shop.id}} -->
+            <li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index" @click="$router.push(`/shop/${shop.id}`)">
               <a>
                 <div class="shop_left">
                   <img class="shop_img" :src="'https://fuss10.elemecdn.com' + shop.image_path">

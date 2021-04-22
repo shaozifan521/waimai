@@ -46,11 +46,13 @@ export default [
     component: Login
   },
   {
-    path: '/shop',
+    path: '/shop/:id',
+    name: 'shop',
+    props: true, // 将动态路由的参数已组件标签的形式（props形式）传递给子组件
     component: Shop,
     children: [
       {
-        path: '/shop/goods',
+        path: 'goods',
         component: Goods
       },
       {
@@ -63,7 +65,7 @@ export default [
       },
       {
         path: '',
-        redirect: '/shop/goods'
+        redirect: 'goods'
       }
     ]
   }
