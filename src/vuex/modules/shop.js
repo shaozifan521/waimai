@@ -43,6 +43,15 @@ const mutations = {
         state.cartFoods.splice(state.cartFoods.indexOf(food), 1)
       }
     }
+  },
+  clearCart (state) {
+    // 删除购物车中所有food的count属性
+    state.cartFoods.forEach(food => {
+      food.count = 0
+      // delete food.count
+    })
+    // 清除购物车数组中的foods
+    state.cartFoods = []
   }
 }
 

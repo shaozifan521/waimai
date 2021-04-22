@@ -22,7 +22,7 @@
         <div class="shopcart-list" style="display: none;" v-show="listShow">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <span class="empty" @click="clearCart">清空</span>
           </div>
           <div class="list-content" ref="foodList">
             <ul>
@@ -40,12 +40,15 @@
         </div>
       </transition>
     </div>
-    <div class="list-mask" style="display: none;" v-show="listShow" @click="toggleShow"></div>
+    <transition name="fade">
+      <div class="list-mask" style="display: none;" v-show="listShow" @click="toggleShow"></div>
+    </transition>
   </div>
 </template>
 
 <script>
 import BScroll from '@better-scroll/core'
+import { MessageBox } from 'mint-ui'
 import { mapState, mapGetters } from 'vuex'
 export default {
   data () {
@@ -59,6 +62,13 @@ export default {
       if (this.totalCount > 0) {
         this.isShow = !this.isShow
       }
+    },
+    clearCart () {
+      MessageBox.confirm('确定清空吗?').then(
+        () => {
+          this.$store.commit('clearCart')
+        }
+      )
     }
   },
   computed: {
