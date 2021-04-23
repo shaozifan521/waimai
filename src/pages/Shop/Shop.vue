@@ -26,9 +26,10 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getShopInfo')
-    this.$store.dispatch('getShopRatings')
-    this.$store.dispatch('getShopGoods')
+    // this.$store.dispatch('getShopInfo')
+    // this.$store.dispatch('getShopRatings')
+    // this.$store.dispatch('getShopGoods')
+    this.$store.dispatch('getShop', this.id)
   },
   components: {
     ShopHeader

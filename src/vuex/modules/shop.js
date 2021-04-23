@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import {
-  reqShopInfo,
-  reqShopRatings,
-  reqShopGoods
+  // reqShopInfo,
+  // reqShopRatings,
+  // reqShopGoods,
+  reqShop
 } from '../../api'
 
 const state = {
-  goods: [], // 商品列表
-  ratings: [], // 商家评价列表
-  info: {}, // 商家信息
-  cartFoods: [] // 购物车所有food的数组
+  // goods: [], // 商品列表
+  // ratings: [], // 商家评价列表
+  // info: {}, // 商家信息
+  cartFoods: [], // 购物车所有food的数组
+  shop: {} // 根据商家id获取对应的商家数据
 }
 
 const mutations = {
@@ -52,40 +54,59 @@ const mutations = {
     })
     // 清除购物车数组中的foods
     state.cartFoods = []
+  },
+  receiveShop (state, shop) {
+    state.shop = shop
   }
 }
 
 const actions = {
-  // 异步获取商家信息
-  async getShopInfo ({ commit }, cb) {
-    const result = await reqShopInfo()
-    if (result.code === 0) {
-      const info = result.data
-      commit('receiveInfo', info)
-      // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
-      cb && cb()
-    }
-  },
+  // // 异步获取商家信息
+  // async getShopInfo ({ commit }, cb) {
+  //   const result = await reqShopInfo()
+  //   if (result.code === 0) {
+  //     const info = result.data
+  //     commit('receiveInfo', info)
+  //     // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+  //     cb && cb()
+  //   }
+  // },
 
-  // 异步获取商家评价列表
-  async getShopRatings ({ commit }, cb) {
-    const result = await reqShopRatings()
-    if (result.code === 0) {
-      const ratings = result.data
-      commit('receiveRatings', ratings)
-      // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
-      cb && cb()
-    }
-  },
+  // // 异步获取商家评价列表
+  // async getShopRatings ({ commit }, cb) {
+  //   const result = await reqShopRatings()
+  //   if (result.code === 0) {
+  //     const ratings = result.data
+  //     commit('receiveRatings', ratings)
+  //     // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+  //     cb && cb()
+  //   }
+  // },
+
+  // // 异步获取商家商品列表
+  // async getShopGoods ({ commit }, cb) {
+  //   const result = await reqShopGoods()
+  //   if (result.code === 0) {
+  //     const goods = result.data
+  //     commit('receiveGoods', goods)
+  //     // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+  //     cb && cb()
+  //   }
+  // },
 
   // 异步获取商家商品列表
-  async getShopGoods ({ commit }, cb) {
-    const result = await reqShopGoods()
+  async getShop ({ commit }, id) {
+    // 如果同一个商家连续多次请求的话，只请求一次数据
+    if (id * 1 === state.shop.id) {
+      return
+    }
+    // 如果进入的是另外新商家，才清除购物车数据
+    commit('clearCart')
+    const result = await reqShop(id)
     if (result.code === 0) {
-      const goods = result.data
-      commit('receiveGoods', goods)
+      const shop = result.data
+      commit('receiveShop', shop)
       // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
-      cb && cb()
     }
   },
 

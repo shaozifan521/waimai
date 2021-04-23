@@ -65,3 +65,6 @@ export const reqShopRatings = () => ajax('/ratings')
 * 获取商家商品数组
 */
 export const reqShopGoods = () => ajax('/goods')
+
+// 根据商家id请求对应的商家数据
+export const reqShop = (id) => ajax('/shop/' + id)

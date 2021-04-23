@@ -80,7 +80,6 @@ export default {
     initScroll () {
       // 当 BScroll 不存在时再创建，解决 BScroll 多次创建产生的bug
       if (!this.leftScroll) {
-        console.log('滚动初始化')
         this.leftScroll = new BScroll(this.$refs.left, {
           click: true // 分发click事件
         })
@@ -128,7 +127,7 @@ export default {
   },
   computed: {
     ...mapState({
-      goods: state => state.shop.goods
+      goods: state => state.shop.shop.goods || []
     }),
     // 获取当前分类的下标
     currentIndex () {
