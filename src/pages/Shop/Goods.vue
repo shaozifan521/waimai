@@ -59,6 +59,13 @@ export default {
     }
   },
   mounted () {
+    // 解决切换路由后，scroll滑动失效的bug
+    if (this.goods.length > 0) {
+      // 初始化 scroll
+      this.initScroll()
+      // 初始化右侧分类集合 tops
+      this.initTops()
+    }
   },
   methods: {
     // 点击左侧选择某个分类项
@@ -71,25 +78,29 @@ export default {
       this.rightScroll.scrollTo(0, -top, 300)
     },
     initScroll () {
-      this.leftScroll = new BScroll(this.$refs.left, {
-        click: true // 分发click事件
-      })
-      // 右侧scroll对象
-      this.rightScroll = new BScroll(this.$refs.right, {
-        click: true, // 分发click事件
-        probeType: 1 // 非实时 触摸
-        // probeType: 2  // 实时 触摸
-        // probeType: 3  // 实时 触摸/惯性/编码
-      })
-      // 绑定scroll监听
-      this.rightScroll.on('scroll', ({ x, y }) => {
-        this.scrollY = Math.abs(y)
-      })
+      // 当 BScroll 不存在时再创建，解决 BScroll 多次创建产生的bug
+      if (!this.leftScroll) {
+        console.log('滚动初始化')
+        this.leftScroll = new BScroll(this.$refs.left, {
+          click: true // 分发click事件
+        })
+        // 右侧scroll对象
+        this.rightScroll = new BScroll(this.$refs.right, {
+          click: true, // 分发click事件
+          probeType: 1 // 非实时 触摸
+          // probeType: 2  // 实时 触摸
+          // probeType: 3  // 实时 触摸/惯性/编码
+        })
+        // 绑定scroll监听
+        this.rightScroll.on('scroll', ({ x, y }) => {
+          this.scrollY = Math.abs(y)
+        })
 
-      // 绑定scrollEnd监听
-      this.rightScroll.on('scrollEnd', ({ x, y }) => {
-        this.scrollY = Math.abs(y)
-      })
+        // 绑定scrollEnd监听
+        this.rightScroll.on('scrollEnd', ({ x, y }) => {
+          this.scrollY = Math.abs(y)
+        })
+      }
     },
     initTops () {
       const tops = []

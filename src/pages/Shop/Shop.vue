@@ -29,9 +29,6 @@ export default {
     this.$store.dispatch('getShopInfo')
     this.$store.dispatch('getShopRatings')
     this.$store.dispatch('getShopGoods')
-
-    // console.log(this.$route.params.id)
-    console.log(this.id)
   },
   components: {
     ShopHeader
