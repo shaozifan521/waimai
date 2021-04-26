@@ -3,7 +3,7 @@
     <div class="goods">
       <div class="menu-wrapper" ref="left">
         <ul ref="leftUl">
-          <li class="menu-item" :class="{current: currentIndex === index}" v-for="(good, index) in goods" :key="index" @click="selectItem(index)">
+          <li class="menu-item" :class="{current: currentIndex === index}" v-for="(good, index) in goods" :key="good.name" @click="selectItem(index)">
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
               {{good.name}}
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import BScroll from '@better-scroll/core'
+import BScroll from 'better-scroll'
 import { mapState } from 'vuex'
 import Food from '@/components/Food/Food'
 import ShopCart from '@/components/ShopCart/ShopCart'

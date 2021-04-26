@@ -17,7 +17,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ShopHeader from '../../components/ShopHeader/ShopHeader'
+import { saveCartFoods } from '@/utils'
 export default {
   props: ['id'],
   data () {
@@ -30,6 +32,24 @@ export default {
     // this.$store.dispatch('getShopRatings')
     // this.$store.dispatch('getShopGoods')
     this.$store.dispatch('getShop', this.id)
+    // 给窗口绑定一个卸载的监听（监听页面刷新）
+    // 两种页面刷新的绑定方式
+    // window.onunload = () => {
+    // }
+    window.addEventListener('unload', () => {
+      let { shop: { id }, cartFoods } = this.shop
+      saveCartFoods(id, cartFoods)
+    })
+  },
+  computed: {
+    ...mapState({
+      shop: state => state.shop
+    })
+  },
+  // 退出商家页面时保存购物车数据
+  beforeDestroy () {
+    let { shop: { id }, cartFoods } = this.shop
+    saveCartFoods(id, cartFoods)
   },
   components: {
     ShopHeader

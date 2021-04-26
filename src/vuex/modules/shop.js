@@ -5,6 +5,7 @@ import {
   // reqShopGoods,
   reqShop
 } from '../../api'
+import { getCartFoods } from '@/utils'
 
 const state = {
   // goods: [], // 商品列表
@@ -15,15 +16,15 @@ const state = {
 }
 
 const mutations = {
-  receiveInfo (state, info) {
-    state.info = info
-  },
-  receiveRatings (state, ratings) {
-    state.ratings = ratings
-  },
-  receiveGoods (state, goods) {
-    state.goods = goods
-  },
+  // receiveInfo (state, info) {
+  //   state.info = info
+  // },
+  // receiveRatings (state, ratings) {
+  //   state.ratings = ratings
+  // },
+  // receiveGoods (state, goods) {
+  //   state.goods = goods
+  // },
   addFoodCount (state, { food }) {
     if (!food.count) { // 第一次
       // 给food添加一个新的属性: 属性名为count, 值为1
@@ -46,17 +47,9 @@ const mutations = {
       }
     }
   },
-  clearCart (state) {
-    // 删除购物车中所有food的count属性
-    state.cartFoods.forEach(food => {
-      food.count = 0
-      // delete food.count
-    })
-    // 清除购物车数组中的foods
-    state.cartFoods = []
-  },
-  receiveShop (state, shop) {
+  receiveShop (state, { shop = {}, cartFoods = [] }) {
     state.shop = shop
+    state.cartFoods = cartFoods
   }
 }
 
@@ -95,18 +88,19 @@ const actions = {
   // },
 
   // 异步获取商家商品列表
-  async getShop ({ commit }, id) {
+  async getShop ({ commit, state }, id) {
     // 如果同一个商家连续多次请求的话，只请求一次数据
     if (id * 1 === state.shop.id) {
       return
     }
     // 如果进入的是另外新商家，才清除购物车数据
-    commit('clearCart')
+    commit('receiveShop', {})
     const result = await reqShop(id)
     if (result.code === 0) {
       const shop = result.data
-      commit('receiveShop', shop)
-      // 如果组件中传递了接收消息的回调函数, 数据更新后, 调用回调通知调用的组件
+      // 读取当前商家的购物车数据
+      let cartFoods = getCartFoods(shop)
+      commit('receiveShop', { shop, cartFoods })
     }
   },
 

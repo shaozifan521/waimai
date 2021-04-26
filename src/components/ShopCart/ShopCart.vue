@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import BScroll from '@better-scroll/core'
+import BScroll from 'better-scroll'
 import { MessageBox } from 'mint-ui'
 import { mapState, mapGetters } from 'vuex'
 export default {

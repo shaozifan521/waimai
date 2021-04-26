@@ -20,7 +20,6 @@ Mock.mock(/^\/api\/shop\/\d+$/, function (options) { // /api/shop/12
   const id = options.url.substring(10)
   // 为啥这里*1？ 我认为这是ESlint的bug，不能==只能===，所以我这样写
   const shop = shops.find(shop => shop.id === id * 1)
-  console.log(shop)
   return Mock.mock({ code: 0, data: shop || shops[0] })
 })
 
