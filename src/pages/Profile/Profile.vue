@@ -96,6 +96,14 @@
     </section>
     <mt-button type="primary" size="large" style="background: #02A774;" @click="toggleLocale">切换语言</mt-button>
     <mt-button v-if="user._id" type="danger" style="width: 100%; margin-top: 20px;" @click="logout">退出登陆</mt-button>
+    <!-- 路由守卫测试部分 -->
+    <section class="profile_my_order border-1px" style="margin-top: 20px;">
+      <router-link to="/a" style="font-size: 20px;">AAA</router-link>
+      &nbsp;&nbsp;
+      <router-link to="/b" style="font-size: 20px;">BBB</router-link>
+      &nbsp;&nbsp;
+      <router-link to="/login" style="font-size: 20px;">去登陆</router-link>
+    </section>
   </div>
 </template>
 
