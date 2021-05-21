@@ -2,18 +2,22 @@
   <div>
     <section class="profile">
       <Header title="我 的"></Header>
-      <section class="profile-number" @click="$router.push('/login')">
+      <section class="profile-number" @click="$router.push(user._id ? '/userinfo' : '/login')">
         <a href="javascript:" class="profile-link">
           <div class="profile_image">
-            <i class="iconfont icon-person"></i>
+            <i class="iconfont iconperson"></i>
           </div>
           <div class="user-info">
-            <p class="user-info-top">登录/注册</p>
-            <p>
+            <p class="user-info-top" v-if="!user.phone">
+              {{user.name ? user.name : '登录/注册'}}
+            </p>
+            <p v-if="!user.name">
               <span class="user-icon">
-                <i class="iconfont icon-shouji icon-mobile"></i>
+                <i class="iconfont iconjianhao"></i>
               </span>
-              <span class="icon-mobile-number">暂无绑定手机号</span>
+              <span class="icon-mobile-number">
+                {{user.phone ? user.phone : '暂无绑定手机号'}}
+              </span>
             </p>
           </div>
           <span class="arrow">
@@ -91,17 +95,24 @@
       </section>
     </section>
     <mt-button type="primary" size="large" style="background: #02A774;" @click="toggleLocale">切换语言</mt-button>
+    <mt-button v-if="user._id" type="danger" style="width: 100%; margin-top: 20px;" @click="logout">退出登陆</mt-button>
   </div>
 </template>
 
 <script>
-
+import { MessageBox } from 'mint-ui'
+import { mapState } from 'vuex'
 export default {
   name: 'Profile',
   data () {
     return {
 
     }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.user.user
+    })
   },
   methods: {
     // 切换语言
@@ -112,6 +123,17 @@ export default {
       this.$i18n.locale = locale
       // 保存新的locale
       localStorage.setItem('locale_key', locale)
+    },
+    logout () {
+      MessageBox.confirm('确定退出吗?').then(
+        action => {
+          // 清除数据
+          this.$store.dispatch('logout')
+        },
+        action => {
+          console.log('取消')
+        }
+      )
     }
   }
 }
@@ -176,7 +198,7 @@ export default {
           border-radius 50%
           overflow hidden
           vertical-align top
-          .icon-person
+          .iconperson
             background #e4e4e4
             font-size 62px
         .user-info
@@ -195,7 +217,7 @@ export default {
               margin-right 5px
               width 20px
               height 20px
-              .icon-mobile
+              .iconjianhao
                 font-size 30px
                 vertical-align text-top
             .icon-mobile-number

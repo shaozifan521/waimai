@@ -10,6 +10,10 @@ import FooterGuider from '@/components/FooterGuider/FooterGuider'
 
 export default {
   mounted () {
+    // 启动时获取地址
+    this.$store.dispatch('getAddress')
+    // 启动时，自动登录
+    this.$store.dispatch('autoLogin')
   },
   components: {
     FooterGuider

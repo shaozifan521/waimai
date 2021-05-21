@@ -4,13 +4,22 @@ import ajax from './ajax'
 export const reqAddress = (longitude, latitude) => ajax(`position/${longitude},${latitude}`)
 
 // 获取食品分类列表
-export const reqCategorys = () => ajax('/index_category')
+export const reqCategorys = () => ajax('/index_category', {
+  // 请求这个接口是否需要携带token的标识
+  headers: {
+    checkToken: true
+  }
+})
 
 // 根据经纬度获取商铺列表
 export const reqShops = (longitude, latitude) => ajax('/shops', {
   params: {
     longitude,
     latitude
+  },
+  // 请求这个接口是否需要携带token的标识
+  headers: {
+    checkToken: true
   }
 })
 
@@ -48,6 +57,13 @@ export const reqSmsLogin = ({ phone, code }) => ajax({
   data: {
     phone,
     code
+  }
+})
+
+// 自动登陆
+export const reqAutoLogin = () => ajax('/auto_login', {
+  headers: {
+    checkToken: true
   }
 })
 
